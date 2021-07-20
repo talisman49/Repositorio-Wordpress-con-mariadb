@@ -1,0 +1,38 @@
+version: "3.0"
+services:
+
+  wordpress:
+
+    image: wordpress:5.7.2-php7.4-apache
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: $(USER_PASSWORD) 
+    volumes:
+      - wordpress:/var/www/html
+  db:
+    image: mariadb:10.6.3-focal
+    restart: unless-stopped
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $(ROOT_PASSWORD)
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: $(USER_PASSWORD)
+
+  phpmyadmin:
+    image: phpmyadmin:5.1.1-apache
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    environment:
+      PMA_HOST: 
+       
+volumes:
+  mariadb:
+  wordpress:
